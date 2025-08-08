@@ -34,3 +34,8 @@ curl -X POST http://localhost:6789/v1/chat/completions \
     "max_tokens": 50,
     "stream": true
   }'
+
+# Test server health
+curl http://localhost:6789/health
+# or
+curl http://localhost:6789/v1/models
