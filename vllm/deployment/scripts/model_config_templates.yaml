@@ -1,0 +1,160 @@
+# =============================================================================
+# vLLM Deployment Configuration Templates
+# Usage: python deploy_vllm.py --config <config_file.yaml>
+# =============================================================================
+
+# ==========================
+# CONFIG 1: Single GPU Setup
+# ==========================
+# File: vllm_single_gpu.yaml
+single_gpu:
+  model:
+    path: "/path/to/your/model"  # Update this path
+    dtype: "half"
+    trust_remote_code: true
+    
+  deployment:
+    host: "0.0.0.0"
+    port: 6789
+    api_key: "your-api-key-here"  # Update this
+    
+  gpu:
+    visible_devices: "2"  # Single GPU
+    tensor_parallel_size: 1
+    gpu_memory_utilization: 0.9
+    
+  performance:
+    max_model_len: 4096
+    block_size: 16
+    swap_space: 4
+    
+  features:
+    tool_call_parser: "hermes"
+    log_level: "INFO"
+    disable_custom_all_reduce: false
+    enforce_eager: false
+
+# ===========================
+# CONFIG 2: Multi-GPU Setup
+# ===========================
+# File: vllm_multi_gpu.yaml
+multi_gpu:
+  model:
+    path: "/path/to/your/model"  # Update this path
+    dtype: "half"
+    trust_remote_code: true
+    
+  deployment:
+    host: "0.0.0.0"
+    port: 6790
+    api_key: "your-api-key-here"  # Update this
+    
+  gpu:
+    visible_devices: "2,3"  # Multiple GPUs
+    tensor_parallel_size: 2
+    gpu_memory_utilization: 0.85
+    
+  performance:
+    max_model_len: 2048  # Conservative for multi-GPU
+    block_size: 16
+    swap_space: 4
+    
+  features:
+    tool_call_parser: "hermes"
+    log_level: "INFO"
+    disable_custom_all_reduce: false
+    enforce_eager: false
+
+# ================================
+# CONFIG 3: Debug/Troubleshooting
+# ================================
+# File: vllm_debug.yaml
+debug:
+  model:
+    path: "/path/to/your/model"  # Update this path
+    dtype: "half"
+    trust_remote_code: true
+    
+  deployment:
+    host: "0.0.0.0"
+    port: 6791
+    api_key: "your-api-key-here"  # Update this
+    
+  gpu:
+    visible_devices: "2,3"
+    tensor_parallel_size: 2
+    gpu_memory_utilization: 0.8  # Conservative
+    
+  performance:
+    max_model_len: 1024  # Very conservative
+    block_size: 8  # Smaller blocks
+    swap_space: 8  # More swap
+    
+  features:
+    tool_call_parser: "hermes"
+    log_level: "DEBUG"  # Verbose logging
+    disable_custom_all_reduce: true  # Disable optimizations
+    enforce_eager: true  # Force eager execution
+
+# ================================
+# CONFIG 4: Production Optimized
+# ================================
+# File: vllm_production.yaml
+production:
+  model:
+    path: "/path/to/your/model"  # Update this path
+    dtype: "half"
+    trust_remote_code: true
+    
+  deployment:
+    host: "0.0.0.0"
+    port: 6789
+    api_key: "your-secure-api-key"  # Update this
+    
+  gpu:
+    visible_devices: "2,3,4,5"  # Use all available GPUs
+    tensor_parallel_size: 4
+    gpu_memory_utilization: 0.95
+    
+  performance:
+    max_model_len: 8192  # Full context
+    block_size: 32  # Larger blocks for efficiency
+    swap_space: 2  # Minimal swap for production
+    
+  features:
+    tool_call_parser: "hermes"
+    log_level: "WARNING"  # Minimal logging
+    disable_custom_all_reduce: false  # Use optimizations
+    enforce_eager: false
+
+# ================================
+# CONFIG 5: Memory Constrained
+# ================================
+# File: vllm_memory_saver.yaml
+memory_saver:
+  model:
+    path: "/path/to/your/model"  # Update this path
+    dtype: "half"
+    trust_remote_code: true
+    
+  deployment:
+    host: "0.0.0.0"
+    port: 6789
+    api_key: "your-api-key-here"  # Update this
+    
+  gpu:
+    visible_devices: "2"
+    tensor_parallel_size: 1
+    gpu_memory_utilization: 0.7  # Very conservative
+    
+  performance:
+    max_model_len: 512  # Minimal context
+    block_size: 4  # Tiny blocks
+    swap_space: 16  # Heavy swap usage
+    cpu_offload_gb: 8  # Offload to CPU
+    
+  features:
+    tool_call_parser: "hermes"
+    log_level: "INFO"
+    disable_custom_all_reduce: true
+    enforce_eager: true
